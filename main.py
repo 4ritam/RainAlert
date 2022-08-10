@@ -1,7 +1,5 @@
 import requests
-import os
 from twilio.rest import Client
-from twilio.http.http_client import TwilioHttpClient
 
 endpoint = "https://api.openweathermap.org/data/2.5/onecall"
 
@@ -25,19 +23,16 @@ need_umbrella = False
 for hour in response_data:
     weather_id = hour["weather"][0]["id"]
     print(weather_id)
-    # if weather_id < 700:
-    #     need_umbrella = True
-    #     break
+    if weather_id < 700:
+        need_umbrella = True
+        break
 
-# if need_umbrella:
-proxy_client = TwilioHttpClient(proxy={'http': os.environ['http_proxy'], 'https': os.environ['https_proxy']})
-client = Client(account_sid, auth_token, http_client=proxy_client)
+if need_umbrella:
+    client = Client(account_sid, auth_token)
 
-client.messages.create(
-                            body="Chati loiya zaa bal",
-                            from_=twilio_number,
-                            to='+918415957390'
-                        )
-
-
+    client.messages.create(
+                                body="Chati loiya zaa bal",
+                                from_=twilio_number,
+                                to='+918415957390'
+                            )
 
